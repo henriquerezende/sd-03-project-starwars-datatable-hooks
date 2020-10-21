@@ -1,4 +1,5 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
+import getPlanets from '../services/apiRequests';
 import PropTypes from 'prop-types';
 
 export const PlanetsContext = createContext(null);
@@ -9,7 +10,14 @@ const PlanetsProvider = ({ children }) => {
   const [isFetching, setIsFetching] = useState(true);
   const [planets, setPlanets] = useState([]);
 
-  const context = { isFetching, setIsFetching, planets, setPlanets };
+  useEffect(() => {
+    getPlanets().then((data) => {
+      setPlanets(data);
+      setIsFetching(false);
+    });
+  }, [])
+
+  const context = { isFetching, planets };
 
   return <PlanetsContext.Provider value={context}>{children}</PlanetsContext.Provider>;
 };

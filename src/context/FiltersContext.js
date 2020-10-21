@@ -15,14 +15,13 @@ const FiltersProvider = ({ children }) => {
     },
     avaliableFilters: {
       columnFilters: [
-        { name: 'all', avaliable: true },
         { name: 'population', avaliable: true },
         { name: 'orbital_period', avaliable: true },
         { name: 'diameter', avaliable: true },
         { name: 'rotation_period', avaliable: true },
         { name: 'surface_water', avaliable: true },
       ],
-      comparisonFilters: ['all', 'maior que', 'igual a', 'menor que'],
+      comparisonFilters: ['maior que', 'igual a', 'menor que'],
     },
   });
 

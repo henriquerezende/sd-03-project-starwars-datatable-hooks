@@ -1,5 +1,5 @@
 import React from 'react';
-import Table from './components/Table';
+import Planets from './components/Planets';
 import Filters from './components/Filters';
 import PlanetsProvider from './context/PlanetsContext';
 import FiltersProvider from './context/FiltersContext';
@@ -8,7 +8,7 @@ const App = () => (
   <PlanetsProvider>
     <FiltersProvider>
       <Filters />
-      <Table />
+      <Planets />
     </FiltersProvider>
   </PlanetsProvider>
 );

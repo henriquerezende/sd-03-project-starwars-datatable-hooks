@@ -1,7 +1,6 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { PlanetsContext } from '../context/PlanetsContext';
-import TableLine from './TableLine';
-import getPlanets from '../services/apiRequests';
+import PlanetTable from './PlanetTable';
 import { FiltersContext } from '../context/FiltersContext';
 
 const lessThan = (planet, column, value) => {
@@ -57,48 +56,31 @@ const sortPlanets = (planetA, planetB, { column, sort }) => {
   return 0;
 };
 
-const showPlanets = (data, nameFilter, filterByNumericValues, order) => data
-  .reduce((acc, planet) => {
+const filterPlanets = (data, nameFilter, filterByNumericValues) =>
+  data.reduce((acc, planet) => {
     if (isFiltered(planet, nameFilter, filterByNumericValues)) {
-      acc.push(<TableLine key={planet.name} planet={planet} />);
+      acc.push(<PlanetTable key={planet.name} planet={planet} />);
     }
     return acc;
-  }, [])
-  .sort((planetA, planetB) => sortPlanets(planetA, planetB, order));
-
-const Table = () => {
-  const { isFetching, setIsFetching, planets, setPlanets } = useContext(PlanetsContext);
-  const { filters: { filterByName, filterByNumericValues, order } } = useContext(FiltersContext);
-  useEffect(() => {
-    getPlanets().then((data) => {
-      setPlanets(data);
-      setIsFetching(false);
-    });
   }, []);
+
+const Planets = () => {
+  const { isFetching, planets } = useContext(PlanetsContext);
+  const {
+    filters: { filterByName, filterByNumericValues, order },
+  } = useContext(FiltersContext);
 
   if (isFetching) return <p>loading</p>;
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>name</th>
-          <th>climate</th>
-          <th>created</th>
-          <th>diameter</th>
-          <th>edited</th>
-          <th>films</th>
-          <th>gravity</th>
-          <th>orbital_period</th>
-          <th>population</th>
-          <th>rotation_period</th>
-          <th>surface_water</th>
-          <th>terrain</th>
-          <th>url</th>
-        </tr>
-      </thead>
-      <tbody>{showPlanets(planets.results, filterByName.name, filterByNumericValues, order)}</tbody>
-    </table>
+    <div className="row">
+      {filterPlanets(
+        planets.results,
+        filterByName.name,
+        filterByNumericValues,
+        order,
+      ).sort((planetA, planetB) => sortPlanets(planetA, planetB, order))}
+    </div>
   );
 };
 
-export default Table;
+export default Planets;
